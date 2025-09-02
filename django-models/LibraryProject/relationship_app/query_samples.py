@@ -12,7 +12,7 @@ def run_queries():
     # 1. Query all books by a specific author
     author_name = "J.K. Rowling"
     author = Author.objects.get(name=author_name)
-    books_by_author = author.books.all()
+    books_by_author = author.books.filter(author=author)
     print(f"Books by {author_name}: {[book.title for book in books_by_author]}")
 
     # 2. List all books in a library
