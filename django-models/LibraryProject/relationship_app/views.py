@@ -92,3 +92,15 @@ def librarian_view(request):
 @login_required
 def member_view(request):
     return render(request, "relationship_app/member_view.html")
+
+@login_required
+def role_redirect_view(request):
+    """Redirect users to their dashboard based on role"""
+    role = request.user.userprofile.role
+
+    if role == "Admin":
+        return redirect("admin_view")
+    elif role == "Librarian":
+        return redirect("librarian_view")
+    else:  # Default to Member
+        return redirect("member_view")
