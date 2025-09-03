@@ -5,7 +5,7 @@ from .models import Library, Book
 
 
 # Function-based view: list all books
-def book_list(request):
+def list_books(request):
     books = Book.objects.all()
     
     # Option 1: Plain text response
