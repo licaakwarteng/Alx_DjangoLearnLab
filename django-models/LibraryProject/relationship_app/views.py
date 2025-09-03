@@ -6,7 +6,7 @@ from .models import Book, Library
 
 # Function-based view: list all books
 def book_list(request):
-    books = Book.objects.select_related("author").all()
+    books = Book.objects.all()
     
     # Option 1: Plain text response
     # output = ", ".join([f"{book.title} by {book.author.name}" for book in books])
