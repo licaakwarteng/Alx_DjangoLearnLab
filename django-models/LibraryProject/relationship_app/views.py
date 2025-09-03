@@ -13,7 +13,7 @@ def book_list(request):
     # return HttpResponse(output)
 
     # Option 2: Render using template
-    return render(request, "relationship_app/book_list.html", {"books": books})
+    return render(request, "relationship_app/list_books.html", {"books": books})
 
 
 # Class-based view: show details of a library and its books
