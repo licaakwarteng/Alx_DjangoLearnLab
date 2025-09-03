@@ -15,4 +15,9 @@ urlpatterns = [
     path("Librarian/", views.Librarian, name="librarian_view"),
     path("Member/", views.Member, name="member_view"),
     path("redirect/", views.role_redirect_view, name="role_redirect"),
+
+    # Book management with permissions
+    path("books/add/", views.add_book, name="add_book"),
+    path("books/edit/<int:book_id>/", views.edit_book, name="edit_book"),
+    path("books/delete/<int:book_id>/", views.delete_book, name="delete_book"),
 ]
