@@ -12,10 +12,6 @@ from .models import Book
 # Function-based view: list all books
 def list_books(request):
     books = Book.objects.all()
-    
-    # Option 1: Plain text response
-    # output = ", ".join([f"{book.title} by {book.author.name}" for book in books])
-    # return HttpResponse(output)
 
     # Option 2: Render using template
     return render(request, "relationship_app/list_books.html", {"books": books})
@@ -63,7 +59,6 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return render(request, "relationship_app/logout.html")
-
 
 
 

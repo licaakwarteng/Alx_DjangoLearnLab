@@ -29,6 +29,8 @@ def save_user_profile(sender, instance, **kwargs):
 
     
 
+    
+
 # Create your models here.
 class Author(models.Model):
     name = models.CharField()
