@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!gqnhmy-xeb6w3a!s&-hhy=foh32b-dqyw&qwy9mc$-fy+6*vz'
+SECRET_KEY = 'django-insecure-0(&j@%twsg3gsudq+gilp*b+70b&r^pfu)__p_*0qu_&rv&4un'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bookshelf.apps.BookshelfConfig',
+    'bookshelf',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +51,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
+
+#login and logout urls for access
+LOGIN_REDIRECT_URL = "/login/profile"
+LOGOUT_REDIRECT_URL = "/login/profile"
 
 TEMPLATES = [
     {
@@ -90,6 +94,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
