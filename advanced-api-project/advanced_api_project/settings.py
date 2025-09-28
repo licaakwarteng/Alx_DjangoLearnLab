@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-ROOT_URLCONF = 'advancedapiproject.urls'
+ROOT_URLCONF = 'advanced_api_project.urls'
 
 TEMPLATES = [
     {
