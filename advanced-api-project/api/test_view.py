@@ -40,7 +40,7 @@ class BookAPITestCase(APITestCase):
         }
         # Without login
         response = self.client.post(self.create_url, data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         # With login
         self.client.login(username='testuser', password='testpass')

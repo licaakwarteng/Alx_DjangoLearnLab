@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Author, Book
-import datetime
+from datetime import datetime
 
 # serializer for the book model
 class BookSerializer(serializers.ModelSerializer):
