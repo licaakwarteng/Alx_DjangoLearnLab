@@ -130,6 +130,21 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse('post-detail', kwargs={'pk': self.object.post.pk})
 
 # List posts having a given tag name
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'  # reuse your post list page
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        return Post.objects.filter(tags__slug=tag_slug)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.kwargs.get('tag_slug')
+        return context
+    
+    
 class TagPostListView(ListView):
     model = Post
     template_name = 'blog/post_list_by_tag.html'  # you can reuse post_list.html if preferred
@@ -168,3 +183,4 @@ class SearchResultsView(ListView):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q', '')
         return context
+    
