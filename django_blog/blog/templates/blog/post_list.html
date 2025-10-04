@@ -42,6 +42,14 @@
     {% endif %}
 
     {% endblock %}
+    <p>
+    Tags:
+    {% for tag in post.tags.all %}
+        <a href="{% url 'posts-by-tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% empty %}
+        <span>No tags</span>
+    {% endfor %}
+    </p>
 
 </body>
 </html>

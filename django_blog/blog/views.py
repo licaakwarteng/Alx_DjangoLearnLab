@@ -9,7 +9,7 @@ from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
+from django.db.models import Q
 
 
 def register(request):
@@ -53,9 +53,10 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = 'blog/post_form.html'   # reused for create & update
 
     def form_valid(self, form):
-        # set the author to the logged-in user
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        post = super().form_valid(form)
+        # form.save already handles tags on commit
+        return post
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
@@ -65,6 +66,10 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
+
+    def form_valid(self, form):
+        # Update tags handled in form.save
+        return super().form_valid(form)
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
@@ -124,3 +129,42 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         return reverse('post-detail', kwargs={'pk': self.object.post.pk})
 
+# List posts having a given tag name
+class TagPostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list_by_tag.html'  # you can reuse post_list.html if preferred
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        tag_name = self.kwargs.get('tag_name')
+        # case-sensitive by default; adjust with icontains if needed
+        return Post.objects.filter(tags__name=tag_name).order_by('-published_date').distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag_name'] = self.kwargs.get('tag_name')
+        return context
+
+# Search view: searches title, content, or tag name
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        query = self.request.GET.get('q', '').strip()
+        if not query:
+            return Post.objects.none()
+        # split query into words optionally, but here do a simple multi-field search
+        return Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).order_by('-published_date').distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        return context

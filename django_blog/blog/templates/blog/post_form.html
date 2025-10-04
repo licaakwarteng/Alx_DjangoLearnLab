@@ -18,6 +18,17 @@
 
     <a href="{% url 'post-list' %}">Cancel</a>
     {% endblock %}
+    
+    {% extends 'base.html' %}
+    {% block content %}
+    <h1>{% if view.object %}Edit Post{% else %}New Post{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if view.object %}Update{% else %}Publish{% endif %}</button>
+    </form>
+    <a href="{% url 'post-list' %}">Cancel</a>
+    {% endblock %}
 
 </body>
 </html>

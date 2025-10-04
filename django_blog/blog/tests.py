@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
-from .models import Post, Comment
+from .models import Post, Comment, Tag
 
 class CommentTests(TestCase):
     def setUp(self):
@@ -30,3 +30,27 @@ class CommentTests(TestCase):
 
         r2 = self.client.post(delete_url)
         self.assertEqual(r2.status_code, 403)
+
+
+class TagSearchTests(TestCase):
+    def setUp(self):
+        u = User.objects.create_user('u', password='p')
+        self.p1 = Post.objects.create(title='Django tips', content='Some content about Django', author=u)
+        self.p2 = Post.objects.create(title='Python notes', content='Python content', author=u)
+        # create tag and attach
+        tag = Tag.objects.create(name='django')
+        self.p1.tags.add(tag)
+
+    def test_tag_list_view(self):
+        resp = self.client.get(reverse('posts-by-tag', kwargs={'tag_name': 'django'}))
+        self.assertContains(resp, 'Django tips')
+        self.assertNotContains(resp, 'Python notes')
+
+    def test_search_by_keyword(self):
+        resp = self.client.get(reverse('search') + '?q=Python')
+        self.assertContains(resp, 'Python notes')
+        self.assertNotContains(resp, 'Django tips')
+
+    def test_search_by_tag(self):
+        resp = self.client.get(reverse('search') + '?q=django')
+        self.assertContains(resp, 'Django tips')
