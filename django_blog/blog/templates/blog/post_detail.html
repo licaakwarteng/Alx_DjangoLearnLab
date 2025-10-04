@@ -26,5 +26,44 @@
     <a href="{% url 'post-list' %}">Back to posts</a>
     {% endblock %}
 
+    <!-- inside post_detail.html, after post body -->
+    <section id="comments">
+    <h3>Comments ({{ post.comments.count }})</h3>
+
+    <ul>
+        {% for comment in post.comments.all %}
+        <li id="comment-{{ comment.pk }}">
+            <p>
+            <strong>{{ comment.author.username }}</strong>
+            <small>{{ comment.created_at|date:"M d, Y H:i" }}{% if comment.updated_at and comment.updated_at != comment.created_at %} (edited) {% endif %}</small>
+            </p>
+            <div>{{ comment.content|linebreaks }}</div>
+
+            {% if user.is_authenticated and user == comment.author %}
+            <p>
+                <a href="{% url 'comment-update' post_pk=post.pk pk=comment.pk %}">Edit</a> |
+                <a href="{% url 'comment-delete' post_pk=post.pk pk=comment.pk %}">Delete</a>
+            </p>
+            {% endif %}
+        </li>
+        {% empty %}
+        <li>No comments yet — be the first!</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    {% if user.is_authenticated %}
+        <h4>Leave a comment</h4>
+        <form action="{% url 'comment-create' post_pk=post.pk %}" method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Post comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to leave a comment.</p>
+    {% endif %}
+    </section>
+
 </body>
 </html>

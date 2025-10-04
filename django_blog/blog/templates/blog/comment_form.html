@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+    <h1>{% if view.object %}Edit comment{% else %}New comment{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if view.object %}Update{% else %}Post{% endif %}</button>
+    </form>
+    <a href="{% url 'post-detail' pk=view.kwargs.post_pk %}">Back to post</a>
+    {% endblock %}
+
+</body>
+</html>
