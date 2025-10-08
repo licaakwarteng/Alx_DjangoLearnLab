@@ -85,7 +85,7 @@ class UnlikePostView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = Post.objects.get(pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
         try:
             like = Like.objects.get(user=request.user, post=post)
             like.delete()
