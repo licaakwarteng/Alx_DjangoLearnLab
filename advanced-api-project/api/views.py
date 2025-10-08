@@ -2,7 +2,8 @@ from rest_framework import generics, filters
 from .models import Book
 from .serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework
+# from django_filters.rest_framework import DjangoFilterBackend
 
 class BookListView(generics.ListAPIView):
     """
@@ -64,7 +65,7 @@ class BookDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     filter_backends = [
-        DjangoFilterBackend,
+        rest_framework.DjangoFilterBackend,
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
