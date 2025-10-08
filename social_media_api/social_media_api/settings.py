@@ -39,12 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'posts',
+    'notifications',
     'rest_framework',
     'rest_framework.authtoken',
 ]
 
-# Use the custom user model
-AUTH_USER_MODEL = 'accounts.User'
+# # Use the custom user model
+# AUTH_USER_MODEL = 'accounts.User'
 
 
 # REST framework settings (token authentication default)
