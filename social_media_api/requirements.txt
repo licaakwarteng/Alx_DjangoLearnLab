@@ -1,0 +1,8 @@
+Django>=4.2
+gunicorn
+psycopg2-binary
+dj-database-url
+python-dotenv
+whitenoise
+django-storages[boto3]   # optional for S3
+boto3                    # if using S3
